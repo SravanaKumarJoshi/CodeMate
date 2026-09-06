@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CodeMate — Large Repository AI Codebase Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Navbar -->
+    <header class="top-nav">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1>CodeMate</h1>
+          <span class="brand-tagline">Large Repository AI Assistant</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs (Chat vs Workflow) -->
+      <nav class="nav-tabs">
+        <button id="tabChat" class="nav-tab-btn active" title="Assistant Chat & Codebase Explorer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          Chat
+        </button>
+        <button id="tabWorkflow" class="nav-tab-btn" title="Interactive Request Lifecycle & Architecture">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          Workflow
+        </button>
+      </nav>
+
+      <!-- Repository Selector Dropdown -->
+      <div class="repo-selector-container">
+        <label for="repoSelect" class="repo-label">Repository:</label>
+        <div class="select-wrapper">
+          <select id="repoSelect" class="repo-dropdown" title="Select active codebase repository">
+            <option value="repo_sample_project">Sample E-Commerce Store</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- System Diagnostic Status Pills -->
+      <div class="nav-status">
+        <div class="status-pill" id="healthPill">
+          <span class="status-dot"></span>
+          <span id="healthText">Ready</span>
+        </div>
+        <div class="status-pill llm-pill" id="llmModePill" title="LLM Operational Mode">
+          <span class="badge-icon">🤖</span>
+          <span id="llmModeText">LLM: Offline Demo</span>
+        </div>
+        <div class="status-pill rag-pill" id="ragPill" title="ChromaDB Indexed Vectors">
+          <span class="badge-icon">🗄️</span>
+          <span id="ragChunkCount">0 Chunks</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="nav-actions">
+        <label for="zipFileInput" class="btn btn-primary" title="Upload Large Repository ZIP (up to 2 GB)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          Upload Repo ZIP
+        </label>
+        <input type="file" id="zipFileInput" accept=".zip" style="display: none;" />
+      </div>
+    </header>
+
+    <!-- Indexing Progress Banner (Shows during background ingestion) -->
+    <div id="indexingBanner" class="indexing-banner hidden">
+      <div class="indexing-content">
+        <div class="indexing-header">
+          <span class="indexing-spinner"></span>
+          <strong id="indexingTitle">Indexing Repository...</strong>
+          <span id="indexingCount">0 / 0 files</span>
+        </div>
+        <div class="progress-bar-track">
+          <div id="indexingProgressBar" class="progress-bar-fill" style="width: 0%;"></div>
+        </div>
+        <div class="indexing-footer">
+          <span id="indexingStatusDetail">Streaming and generating AST chunks...</span>
+          <span id="indexingPercent">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN VIEW 1: CHAT & PROJECT EXPLORER -->
+    <div id="chatView" class="workspace">
+      <!-- Left Sidebar: Project Explorer & 10 Demo Scenarios -->
+      <aside class="sidebar">
+        <!-- Section 1: Project Explorer -->
+        <div class="sidebar-section explorer-section">
+          <div class="section-header">
+            <h3>Project Explorer</h3>
+            <span class="file-count" id="fileCountBadge">0 files</span>
+          </div>
+          <div class="file-search-box">
+            <input type="text" id="fileSearchInput" placeholder="Filter files..." />
+          </div>
+          <div class="file-tree" id="fileTreeContainer">
+            <div class="empty-tree">Loading codebase files...</div>
+          </div>
+        </div>
+
+        <!-- Section 2: Demo Interview Queries (All 10 questions) -->
+        <div class="sidebar-section demo-section">
+          <div class="section-header">
+            <h3>Interview Demo Queries</h3>
+          </div>
+          <p class="demo-subtitle">Click to test the verified interview scenarios:</p>
+          <div class="demo-queries">
+            <button class="demo-btn" data-query="Where is authentication implemented?">
+              <span class="demo-num">1</span>
+              <span class="demo-btn-text">Where is authentication implemented?</span>
+            </button>
+
+            <button class="demo-btn" data-query="Explain how login works in this application.">
+              <span class="demo-num">2</span>
+              <span class="demo-btn-text">Explain how login works in this application.</span>
+            </button>
+
+            <button class="demo-btn" data-query="Generate unit tests for the login function.">
+              <span class="demo-num">3</span>
+              <span class="demo-btn-text">Generate unit tests for the login function.</span>
+            </button>
+
+            <button class="demo-btn" data-query="Why could the login endpoint return a 401 error?">
+              <span class="demo-num">4</span>
+              <span class="demo-btn-text">Why could the login endpoint return a 401 error?</span>
+            </button>
+
+            <button class="demo-btn" data-query="Explain the complete architecture of this project.">
+              <span class="demo-num">5</span>
+              <span class="demo-btn-text">Explain the complete architecture of this project.</span>
+            </button>
+
+            <button class="demo-btn" data-query="What database does this application use?">
+              <span class="demo-num">6</span>
+              <span class="demo-btn-text">What database does this application use?</span>
+            </button>
+
+            <button class="demo-btn" data-query="How does the users API interact with authentication?">
+              <span class="demo-num">7</span>
+              <span class="demo-btn-text">How does the users API interact with authentication?</span>
+            </button>
+
+            <button class="demo-btn" data-query="List the important files involved in user registration.">
+              <span class="demo-num">8</span>
+              <span class="demo-btn-text">List the important files involved in user registration.</span>
+            </button>
+
+            <button class="demo-btn" data-query="Where is the database connection configured?">
+              <span class="demo-num">9</span>
+              <span class="demo-btn-text">Where is the database connection configured?</span>
+            </button>
+
+            <button class="demo-btn" data-query="Give me a summary of this repository.">
+              <span class="demo-num">10</span>
+              <span class="demo-btn-text">Give me a summary of this repository.</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Chat Area -->
+      <main class="chat-main">
+        <div class="messages-container" id="messagesContainer">
+          <!-- Welcome Hero Card -->
+          <div class="welcome-card" id="welcomeCard">
+            <div class="welcome-badge">ENTERPRISE CODEBASE ASSISTANT</div>
+            <h2>CodeMate Assistant</h2>
+            <p>
+              Ask any question about your codebase. Queries route through our
+              <strong>scikit-learn</strong> classifier, execute through an iterative
+              <strong>LangGraph</strong> tool-calling agent, retrieve AST-parsed chunks via
+              <strong>ChromaDB</strong>, and synthesize grounded responses with file citations.
+            </p>
+            <div class="pipeline-flow">
+              <span class="flow-step">Query</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-step step-ml">TF-IDF Classifier</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-step step-agent">LangGraph Loop</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-step step-tools">Tools & AST Search</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-step step-rag">ChromaDB RAG</span>
+              <span class="flow-arrow">→</span>
+              <span class="flow-step step-llm">Grounded Answer</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input Bar -->
+        <div class="input-area">
+          <form id="chatForm" class="chat-form">
+            <div class="input-wrapper">
+              <textarea
+                id="messageInput"
+                placeholder="Ask anything about the codebase (e.g., 'Explain how auth interacts with users.py')..."
+                rows="1"
+                required
+              ></textarea>
+              <button type="submit" id="btnSend" class="btn-send" title="Send Query">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </div>
+          </form>
+          <div class="input-footer">
+            <span>Press <strong>Enter</strong> to send &bull; <strong>Shift+Enter</strong> for newline &bull; Sources are clickable</span>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- MAIN VIEW 2: DEDICATED WORKFLOW PAGE -->
+    <div id="workflowView" class="workspace workflow-workspace hidden">
+      <div class="workflow-container">
+        <div class="workflow-header-section">
+          <h2>Request Lifecycle & Agent Architecture</h2>
+          <p>
+            Explore the complete end-to-end CodeMate execution lifecycle.
+            Click any component to inspect its implementation specifications, models, and security boundaries.
+          </p>
+        </div>
+
+        <!-- Section A: Interactive Visual Architecture Flow -->
+        <div class="architecture-flow-diagram">
+          <div class="diagram-row">
+            <!-- Node: User -->
+            <div class="arch-node" data-node="user">
+              <div class="node-icon">👤</div>
+              <div class="node-title">USER</div>
+              <div class="node-sub">Inquiry</div>
+            </div>
+            <div class="flow-connector">→</div>
+
+            <!-- Node: Frontend -->
+            <div class="arch-node" data-node="frontend">
+              <div class="node-icon">💻</div>
+              <div class="node-title">FRONTEND</div>
+              <div class="node-sub">UI & Explorer</div>
+            </div>
+            <div class="flow-connector">→</div>
+
+            <!-- Node: FastAPI Gateway -->
+            <div class="arch-node" data-node="fastapi">
+              <div class="node-icon">⚡</div>
+              <div class="node-title">FASTAPI</div>
+              <div class="node-sub">POST /api/chat</div>
+            </div>
+            <div class="flow-connector">→</div>
+
+            <!-- Node: Intent Classifier -->
+            <div class="arch-node" data-node="intent_classifier">
+              <div class="node-icon">📊</div>
+              <div class="node-title">INTENT CLASSIFIER</div>
+              <div class="node-sub">TF-IDF + LogReg</div>
+            </div>
+            <div class="flow-connector">→</div>
+
+            <!-- Node: LangGraph Agent -->
+            <div class="arch-node" data-node="langgraph_agent">
+              <div class="node-icon">🧠</div>
+              <div class="node-title">LANGGRAPH AGENT</div>
+              <div class="node-sub">Cognitive Loop</div>
+            </div>
+          </div>
+
+          <div class="diagram-branch-row">
+            <div class="branch-indicator">Cognitive Tool Iteration & RAG Search:</div>
+            <div class="branch-boxes">
+              <!-- Node: Agent Tools -->
+              <div class="arch-node branch-node" data-node="tools">
+                <div class="node-icon">🛠️</div>
+                <div class="node-title">AGENT TOOLS</div>
+                <div class="node-sub">search, read, symbols</div>
+              </div>
+              <div class="flow-connector">⇄</div>
+
+              <!-- Node: RAG ChromaDB -->
+              <div class="arch-node branch-node" data-node="rag_chromadb">
+                <div class="node-icon">🗄️</div>
+                <div class="node-title">RAG / CHROMADB</div>
+                <div class="node-sub">Isolated Vector Search</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="diagram-row final-row">
+            <div class="flow-connector">↓</div>
+            <!-- Node: LLM Synthesis -->
+            <div class="arch-node" data-node="llm_synthesis">
+              <div class="node-icon">🤖</div>
+              <div class="node-title">LLM SYNTHESIZER</div>
+              <div class="node-sub">Grounded Citations</div>
+            </div>
+            <div class="flow-connector">→</div>
+
+            <div class="arch-node" data-node="fastapi">
+              <div class="node-icon">⚡</div>
+              <div class="node-title">FASTAPI</div>
+              <div class="node-sub">Response 200 OK</div>
+            </div>
+            <div class="flow-connector">→</div>
+
+            <div class="arch-node" data-node="frontend">
+              <div class="node-icon">💻</div>
+              <div class="node-title">FRONTEND</div>
+              <div class="node-sub">Render Markdown</div>
+            </div>
+            <div class="flow-connector">→</div>
+
+            <div class="arch-node" data-node="user">
+              <div class="node-icon">👤</div>
+              <div class="node-title">USER</div>
+              <div class="node-sub">Grounded Answer</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node Inspector Detail Card -->
+        <div id="nodeInspectorCard" class="node-inspector-card">
+          <div class="inspector-header">
+            <h4 id="inspectorNodeTitle">Component Specifications</h4>
+            <span class="inspector-badge">Click any node above to inspect</span>
+          </div>
+          <div id="inspectorNodeContent" class="inspector-content">
+            <p>Click on any component in the architectural workflow above to see its underlying technology, security guardrails, inputs, and operational role.</p>
+          </div>
+        </div>
+
+        <!-- Section B: Live Request Lifecycle Visualizer -->
+        <div class="live-tracer-section">
+          <div class="tracer-header">
+            <h3>Live Request Execution Tracer</h3>
+            <div class="tracer-meta">
+              <span id="tracerRequestId" class="tracer-req-badge">No request run yet</span>
+              <span id="tracerDuration" class="tracer-time-badge">0ms</span>
+            </div>
+          </div>
+          <p class="tracer-query-preview" id="tracerQueryPreview">Run a question in Chat to inspect its real-time step timeline.</p>
+
+          <div class="timeline-container" id="timelineContainer">
+            <div class="timeline-empty">
+              <span>Submit a chat question to view the live multi-step execution trace from <code>/api/workflow/{request_id}</code></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code Viewer Modal with Syntax Highlighting & Line Numbers -->
+    <div class="modal-backdrop" id="fileModalBackdrop">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-file-icon">📄</span>
+            <h4 id="modalFileName">file.py</h4>
+            <span id="modalLineRangeBadge" class="modal-line-badge">Lines 1-100</span>
+          </div>
+          <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="code-viewer-wrapper">
+            <div class="line-numbers" id="modalLineNumbers"></div>
+            <pre class="code-pre"><code id="modalFileContent"></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

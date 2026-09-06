@@ -1,0 +1,111 @@
+query,intent
+"Where is authentication implemented?",CODE_SEARCH
+"Find the function that handles user registration",CODE_SEARCH
+"Where is the login API implemented?",CODE_SEARCH
+"Where are database models defined?",CODE_SEARCH
+"Find the JWT token verification function",CODE_SEARCH
+"Where is password hashing logic located?",CODE_SEARCH
+"Locate the order creation endpoint",CODE_SEARCH
+"Where are the user routes defined?",CODE_SEARCH
+"Find where get_current_user is used",CODE_SEARCH
+"Show me the database connection code",CODE_SEARCH
+"Where is the configuration file?",CODE_SEARCH
+"Find all endpoints handling orders",CODE_SEARCH
+"Where is the User model defined?",CODE_SEARCH
+"Find the router setup in the codebase",CODE_SEARCH
+"Where do we validate user credentials?",CODE_SEARCH
+"Search for secret key definition",CODE_SEARCH
+"Where is the logout function?",CODE_SEARCH
+"Find the database engine initialization",CODE_SEARCH
+"Locate the token expiration setting",CODE_SEARCH
+"Where are the API route definitions?",CODE_SEARCH
+"Explain how authentication works in this project",CODE_EXPLANATION
+"Explain this function",CODE_EXPLANATION
+"How does the login function work?",CODE_EXPLANATION
+"Can you explain the password verification process?",CODE_EXPLANATION
+"Walk me through how user registration works",CODE_EXPLANATION
+"Explain how JWT tokens are generated and validated",CODE_EXPLANATION
+"What does the get_db function do?",CODE_EXPLANATION
+"Explain the order creation workflow",CODE_EXPLANATION
+"How does the dependency injection work for database sessions?",CODE_EXPLANATION
+"Explain the role of the User model",CODE_EXPLANATION
+"Walk through what happens during user login",CODE_EXPLANATION
+"Explain the create_access_token function",CODE_EXPLANATION
+"How does token authentication middleware work?",CODE_EXPLANATION
+"Explain how orders are linked to users in the database",CODE_EXPLANATION
+"What is the purpose of the config file?",CODE_EXPLANATION
+"Explain how password hashing with bcrypt or sha256 works here",CODE_EXPLANATION
+"Can you explain what this database query does?",CODE_EXPLANATION
+"Explain the request validation logic in users.py",CODE_EXPLANATION
+"Explain how error handling is structured in the endpoints",CODE_EXPLANATION
+"Walk through the application lifecycle and startup",CODE_EXPLANATION
+"Why could this function be returning an error?",BUG_ANALYSIS
+"Why could the login endpoint return a 401 error?",BUG_ANALYSIS
+"What causes 401 Unauthorized during login?",BUG_ANALYSIS
+"Why is my JWT token failing verification?",BUG_ANALYSIS
+"Why does registration fail if the email already exists?",BUG_ANALYSIS
+"Why am I getting a database integrity error?",BUG_ANALYSIS
+"Fix the bug in the order calculation",BUG_ANALYSIS
+"Why is get_current_user returning null or throwing an exception?",BUG_ANALYSIS
+"Troubleshoot why the token is expired",BUG_ANALYSIS
+"Why does this endpoint return 404 Not Found?",BUG_ANALYSIS
+"Debug the password verification failure",BUG_ANALYSIS
+"Why is the database session not closing properly?",BUG_ANALYSIS
+"What could cause a 422 Unprocessable Entity error?",BUG_ANALYSIS
+"Why would the user profile route return forbidden?",BUG_ANALYSIS
+"Identify the issue in this authentication handler",BUG_ANALYSIS
+"Why is the password mismatch not handled gracefully?",BUG_ANALYSIS
+"Troubleshoot database connection timeout",BUG_ANALYSIS
+"Why does order creation throw a validation error?",BUG_ANALYSIS
+"Debug why hashed password comparison fails",BUG_ANALYSIS
+"Why is the API throwing an unhandled 500 error?",BUG_ANALYSIS
+"Generate unit tests for this function",TEST_GENERATION
+"Write unit tests for the login function",TEST_GENERATION
+"Create tests for user registration endpoint",TEST_GENERATION
+"Generate pytest test cases for password hashing",TEST_GENERATION
+"Write tests for the create_access_token function",TEST_GENERATION
+"Generate tests for the Order model and order creation",TEST_GENERATION
+"Write unit tests for JWT validation",TEST_GENERATION
+"Create mock tests for database session dependency",TEST_GENERATION
+"Generate tests covering 401 Unauthorized scenarios",TEST_GENERATION
+"Write test cases for invalid login credentials",TEST_GENERATION
+"Generate unit tests for verify_password",TEST_GENERATION
+"Create test suite for the users API router",TEST_GENERATION
+"Write tests for token expiration edge cases",TEST_GENERATION
+"Generate unit tests checking duplicate user registration",TEST_GENERATION
+"Create integration tests for order retrieval",TEST_GENERATION
+"Write pytest fixtures for testing the database",TEST_GENERATION
+"Generate test cases for authentication failure",TEST_GENERATION
+"Write unit tests for config settings validation",TEST_GENERATION
+"Create test coverage for get_current_user helper",TEST_GENERATION
+"Generate unit tests for the orders API endpoints",TEST_GENERATION
+"What database is being used in this project?",ARCHITECTURE
+"How does the request flow through this application?",ARCHITECTURE
+"What is the overall architecture of this codebase?",ARCHITECTURE
+"How are the layers organized in this project?",ARCHITECTURE
+"What libraries and frameworks does this project depend on?",ARCHITECTURE
+"Explain the high level structure of this codebase",ARCHITECTURE
+"How is the API routing architected?",ARCHITECTURE
+"What design patterns are used in this application?",ARCHITECTURE
+"How are database migrations and models structured?",ARCHITECTURE
+"Describe the application component hierarchy",ARCHITECTURE
+"How does data flow from the endpoint to the database?",ARCHITECTURE
+"What tech stack is used in this backend?",ARCHITECTURE
+"How is configuration managed across environments?",ARCHITECTURE
+"Explain the system design of this service",ARCHITECTURE
+"Is this project following MVC or layered architecture?",ARCHITECTURE
+"What is the directory structure and responsibility of each folder?",ARCHITECTURE
+"How are background tasks or async calls structured?",ARCHITECTURE
+"Explain the dependency graph of this application",ARCHITECTURE
+"What security practices are used in this project?",ARCHITECTURE
+"How is the database layer abstracted?",ARCHITECTURE
+"What is CodeMate?",GENERAL_QUERY
+"How do I use this assistant?",GENERAL_QUERY
+"Can you help me understand this codebase?",GENERAL_QUERY
+"Hello, what can you do?",GENERAL_QUERY
+"What are your capabilities?",GENERAL_QUERY
+"Give me a summary of how to ask questions",GENERAL_QUERY
+"Help me navigate this repository",GENERAL_QUERY
+"What tools do you have available?",GENERAL_QUERY
+"Who created this project?",GENERAL_QUERY
+"How should I start exploring this codebase?",GENERAL_QUERY

@@ -1,0 +1,161 @@
+# ==============================================================================
+# CodeMate Enterprise - Git Ignore Configuration
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Byte-compiled / optimized / DLL files
+# ------------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.dll
+*.dylib
+
+# C extensions
+*.obj
+*.o
+*.lib
+
+# ------------------------------------------------------------------------------
+# Virtual Environments & Packaging
+# ------------------------------------------------------------------------------
+.env
+.venv
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ------------------------------------------------------------------------------
+# Environment Variables & Secrets
+# ------------------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+*.env
+!.env.example
+
+# ------------------------------------------------------------------------------
+# Persistent Storage, Databases & User Uploads
+# ------------------------------------------------------------------------------
+# Local SQLite and database files
+*.db
+*.sqlite
+*.sqlite3
+codemate.db
+shopflow.db
+
+# Storage directory (uploaded archives, extracted repositories)
+storage/repositories/
+storage/uploads/
+storage/temp/
+storage/*.zip
+storage/*.tar
+storage/*.tar.gz
+storage/*.tgz
+
+# Data directory (ChromaDB vector store, user projects, SQLite state)
+data/
+data/chromadb/
+data/projects/
+data/*.db
+data/*.sqlite*
+
+# Keep placeholder .gitkeep files if present
+!storage/**/.gitkeep
+!data/**/.gitkeep
+
+# ------------------------------------------------------------------------------
+# Machine Learning & Large Artifacts
+# ------------------------------------------------------------------------------
+# Note: Keep ml/model/ if tracking default seed model, otherwise ignore generated checkpoints
+ml/__pycache__/
+*.joblib.tmp
+*.ckpt
+*.onnx
+*.pt
+*.pth
+*.h5
+
+# ------------------------------------------------------------------------------
+# Testing & Coverage
+# ------------------------------------------------------------------------------
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.tox/
+.nox/
+
+# ------------------------------------------------------------------------------
+# Logs & Temporary Files
+# ------------------------------------------------------------------------------
+logs/
+*.log
+*.log.*
+*.tmp
+*.temp
+*.bak
+*~
+
+# ------------------------------------------------------------------------------
+# Editor & IDE Configs
+# ------------------------------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
+.settings/
+
+# ------------------------------------------------------------------------------
+# Operating System Specific
+# ------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+ehthumbs_vista.db
+Thumbs.db
+desktop.ini
+
+# ------------------------------------------------------------------------------
+# Node / Frontend Artifacts (if applicable)
+# ------------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*

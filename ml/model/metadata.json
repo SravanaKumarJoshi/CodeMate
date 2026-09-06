@@ -1,0 +1,23 @@
+{
+  "model_type": "TF-IDF + LogisticRegression",
+  "labels": [
+    "ARCHITECTURE",
+    "BUG_ANALYSIS",
+    "CODE_EXPLANATION",
+    "CODE_SEARCH",
+    "GENERAL_QUERY",
+    "TEST_GENERATION"
+  ],
+  "sample_count": 110,
+  "cv_accuracy": 0.8455,
+  "trained_at": "2026-09-06T11:31:55.259738Z",
+  "parameters": {
+    "ngram_range": [
+      1,
+      2
+    ],
+    "max_features": 2500,
+    "C": 3.0,
+    "class_weight": "balanced"
+  }
+}

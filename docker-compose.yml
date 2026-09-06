@@ -1,0 +1,12 @@
+services:
+  codemate:
+    build: .
+    container_name: codemate_app
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - MODEL_NAME=${MODEL_NAME:-gpt-4o-mini}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
