@@ -113,6 +113,8 @@ if FRONTEND_DIR.exists():
         if index_file.exists():
             return FileResponse(str(index_file))
         return {"service": settings.APP_NAME, "status": "frontend index.html not found"}
+
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIR)), name="frontend")
 else:
     @app.get("/")
     def serve_api_root():
