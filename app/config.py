@@ -14,16 +14,46 @@ class Settings(BaseSettings):
 
     # Base Directories
     BASE_DIR: Path = Path(__file__).resolve().parent.parent
-    DATA_DIR: Path = BASE_DIR / "data"
-    STORAGE_DIR: Path = BASE_DIR / "storage" / "repositories"
-    UPLOAD_DIR: Path = STORAGE_DIR
-    CHROMA_DIR: Path = DATA_DIR / "chromadb"
+    DATA_DIR: Path = Field(
+        default_factory=lambda: (
+            Path("/tmp/data")
+            if os.environ.get("VERCEL")
+            else Path(__file__).resolve().parent.parent / "data"
+        )
+    )
+    STORAGE_DIR: Path = Field(
+        default_factory=lambda: (
+            Path("/tmp/storage/repositories")
+            if os.environ.get("VERCEL")
+            else Path(__file__).resolve().parent.parent / "storage" / "repositories"
+        )
+    )
+    UPLOAD_DIR: Path = Field(
+        default_factory=lambda: (
+            Path("/tmp/storage/repositories")
+            if os.environ.get("VERCEL")
+            else Path(__file__).resolve().parent.parent / "storage" / "repositories"
+        )
+    )
+    CHROMA_DIR: Path = Field(
+        default_factory=lambda: (
+            Path("/tmp/data/chromadb")
+            if os.environ.get("VERCEL")
+            else Path(__file__).resolve().parent.parent / "data" / "chromadb"
+        )
+    )
     SAMPLE_PROJECT_DIR: Path = BASE_DIR / "sample_project"
     ML_MODEL_PATH: Path = BASE_DIR / "ml" / "model" / "classifier.joblib"
     ML_METADATA_PATH: Path = BASE_DIR / "ml" / "model" / "metadata.json"
 
     # Database
-    DATABASE_URL: str = f"sqlite:///{Path(__file__).resolve().parent.parent / 'data' / 'codemate.db'}"
+    DATABASE_URL: str = Field(
+        default_factory=lambda: (
+            "sqlite:////tmp/codemate.db"
+            if os.environ.get("VERCEL")
+            else f"sqlite:///{Path(__file__).resolve().parent.parent / 'data' / 'codemate.db'}"
+        )
+    )
 
     # Authentication & Security
     # Loaded from .env or environment; if unset, dynamically generates a secure 256-bit random key at startup
@@ -119,7 +149,11 @@ class Settings(BaseSettings):
 settings = Settings()
 
 # Ensure critical directories exist
-settings.DATA_DIR.mkdir(parents=True, exist_ok=True)
-settings.STORAGE_DIR.mkdir(parents=True, exist_ok=True)
-settings.UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
-settings.CHROMA_DIR.mkdir(parents=True, exist_ok=True)
+try:
+    settings.DATA_DIR.mkdir(parents=True, exist_ok=True)
+    settings.STORAGE_DIR.mkdir(parents=True, exist_ok=True)
+    settings.UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    settings.CHROMA_DIR.mkdir(parents=True, exist_ok=True)
+except OSError:
+    pass
+

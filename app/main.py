@@ -88,6 +88,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.ALLOWED_ORIGINS if settings.APP_ENV == "production" else ["*"],
+    allow_origin_regex=r"^https:\/\/.*\.vercel\.app$" if settings.APP_ENV == "production" else None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
