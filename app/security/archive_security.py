@@ -131,7 +131,7 @@ def categorize_exclusion(raw_name: str, is_dir: bool = False) -> Optional[str]:
         return "Git metadata"
 
     # Security sensitive files
-    if filename_lower == ".env":
+    if filename_lower == ".env" or (filename_lower.startswith(".env") and filename_lower != ".env.example"):
         return "Excluded configuration (.env)"
 
     _, ext = os.path.splitext(filename_lower)

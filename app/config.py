@@ -1,6 +1,8 @@
 import os
+import secrets
 from pathlib import Path
-from typing import List, Set
+from typing import List, Set, Union
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -24,10 +26,11 @@ class Settings(BaseSettings):
     DATABASE_URL: str = f"sqlite:///{Path(__file__).resolve().parent.parent / 'data' / 'codemate.db'}"
 
     # Authentication & Security
-    JWT_SECRET_KEY: str = "codemate-enterprise-secret-jwt-key-38472910"
+    # Loaded from .env or environment; if unset, dynamically generates a secure 256-bit random key at startup
+    JWT_SECRET_KEY: str = Field(default_factory=lambda: secrets.token_hex(32))
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_MINUTES: int = 1440
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:8000", "http://127.0.0.1:8000", "http://localhost:3000"]
+    ALLOWED_ORIGINS: Union[List[str], str] = ["http://localhost:8000", "http://127.0.0.1:8000", "http://localhost:3000"]
 
     # LLM & Embedding Settings
     OPENAI_API_KEY: str = ""
@@ -80,6 +83,19 @@ class Settings(BaseSettings):
         "dist", "build", "target", "coverage", ".cache", ".chromadb",
         ".system_generated", "bin", "obj"
     }
+
+    @field_validator("ALLOWED_ORIGINS", mode="before")
+    @classmethod
+    def parse_allowed_origins(cls, v):
+        if isinstance(v, str):
+            if v.strip().startswith("["):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
 
     model_config = SettingsConfigDict(
         env_file=str(Path(__file__).resolve().parent.parent / ".env"),

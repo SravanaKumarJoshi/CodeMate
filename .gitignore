@@ -6,6 +6,7 @@
 # Byte-compiled / optimized / DLL files
 # ------------------------------------------------------------------------------
 __pycache__/
+pycache/
 *.py[cod]
 *$py.class
 *.so
@@ -21,7 +22,6 @@ __pycache__/
 # ------------------------------------------------------------------------------
 # Virtual Environments & Packaging
 # ------------------------------------------------------------------------------
-.env
 .venv
 .venv/
 venv/
@@ -52,8 +52,7 @@ MANIFEST
 # Environment Variables & Secrets
 # ------------------------------------------------------------------------------
 .env
-.env.local
-.env.*.local
+.env.*
 *.env
 !.env.example
 
@@ -68,15 +67,22 @@ codemate.db
 shopflow.db
 
 # Storage directory (uploaded archives, extracted repositories)
-storage/repositories/
-storage/uploads/
-storage/temp/
-storage/*.zip
-storage/*.tar
-storage/*.tar.gz
-storage/*.tgz
+storage/
+storage/**
+repositories/
+repositories/**
+uploads/
+uploads/**
+tmp/
+tmp/**
+temp/
+temp/**
 
-# Data directory (ChromaDB vector store, user projects, SQLite state)
+# ChromaDB vector store
+chroma/
+chroma/**
+chromadb/
+chromadb/**
 data/
 data/chromadb/
 data/projects/
